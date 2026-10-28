@@ -4,7 +4,7 @@
 set -u
 cd "$(dirname "$0")"
 fail=0
-for t in test_*.py; do
+for t in tests/test_*.py; do
     printf '== %s\n' "$t"
     if ! python3 "$t"; then fail=1; fi
 done

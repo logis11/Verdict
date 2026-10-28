@@ -18,3 +18,4 @@ runs.jsonl
 *.dll
 *.pdb
 *.c.gz
+.pytest_cache/
