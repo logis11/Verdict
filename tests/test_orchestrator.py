@@ -14,7 +14,7 @@ import tempfile
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # repo root
 sys.path.insert(0, HERE)
-from huntail import orchestrator as O
+from verdict import orchestrator as O
 
 FAIL = []
 

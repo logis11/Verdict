@@ -23,8 +23,8 @@ import sys
 import capstone
 from capstone import x86 as X
 
-from huntail import xref
-from huntail.pe import PE
+from verdict import xref
+from verdict.pe import PE
 
 PROBE = ("ProbeForRead", "ProbeForWrite")
 PROBE_GLOB = "MmUserProbeAddress"

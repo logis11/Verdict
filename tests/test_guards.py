@@ -65,7 +65,7 @@ def _probe_image(prefix, fn="ProbeForWrite"):
 
 
 def _write(code, imports):
-    from huntail import mkpe
+    from verdict import mkpe
     d = tempfile.mkdtemp(prefix="test_guards_")
     p = os.path.join(d, "v.bin")
     with open(p, "wb") as f:
@@ -86,8 +86,8 @@ BASE = None
 
 def main():
     global BASE
-    from huntail import guards
-    from huntail import mkpe
+    from verdict import guards
+    from verdict import mkpe
     BASE = mkpe.IMAGE_BASE + mkpe.TEXT_VA
 
     # ── A. the positive: a branch that skips the probe ──────────────────────

@@ -23,8 +23,8 @@
 # KILL_CLASSES are not generic theory: they are the reasons candidates in this
 # project have actually died.
 import asyncio
-from huntail import jsonscan
-from huntail import submit
+from verdict import jsonscan
+from verdict import submit
 
 KILL_CLASSES = {
     "unreachable":        "No path from any ingress reaches this code (show it by enumerating callers)",

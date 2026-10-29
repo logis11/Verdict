@@ -40,10 +40,10 @@
 import collections
 import json
 import os
-from huntail.paths import ROOT
+from verdict.paths import ROOT
 import sys
 
-from huntail import verifier_guard as VG
+from verdict import verifier_guard as VG
 
 OK_CFG = {"gated", "gated_inter"}
 
@@ -191,8 +191,8 @@ def audit(files=None, invalid_runs=()):
 def regrade(binpath_of, files=None):
     """Re-run only the T0 rows that have a persisted pair, under today's rules.
     Rows without one are counted as `no_pair`."""
-    from huntail import cfg as CFG
-    from huntail import pe as PEmod
+    from verdict import cfg as CFG
+    from verdict import pe as PEmod
     files = files or (sorted(f for f in os.listdir(STATE) if f.endswith(".json"))
                       if os.path.isdir(STATE) else [])
     out = {"regraded": [], "no_pair": [], "no_binary": [], "guard_only": []}

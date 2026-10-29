@@ -89,7 +89,7 @@ VECTORS = [
 
 
 def main():
-    from huntail import rejaudit as RA
+    from verdict import rejaudit as RA
 
     # ── A. the tier matrix ──────────────────────────────────────────────────
     for name, r, inv, want in VECTORS:
@@ -105,9 +105,9 @@ def main():
     # ── B. the status literal the ledger writes ─────────────────────────────
     # Not hard-coded twice: read it out of the ledger so a drift fails here
     # rather than turning this whole module into a zero-row report.
-    from huntail import ledger
-    src = open(os.path.join(HERE, "huntail", "rejaudit.py"), encoding="utf-8").read()
-    lsrc = open(os.path.join(HERE, "huntail", "ledger.py"), encoding="utf-8").read()
+    from verdict import ledger
+    src = open(os.path.join(HERE, "verdict", "rejaudit.py"), encoding="utf-8").read()
+    lsrc = open(os.path.join(HERE, "verdict", "ledger.py"), encoding="utf-8").read()
     lit = '"rejected"'
     ck("B1: rejaudit matches on the ledger's status literal", lit in src)
     ck("B2: the ledger still writes that literal", lit in lsrc)
@@ -128,7 +128,7 @@ def main():
                      target="e", claim="c")]
     with open(p, "w", encoding="utf-8") as f:
         json.dump({"verdicts": verdicts}, f, ensure_ascii=False)
-    from huntail import verifier_guard as _VG
+    from verdict import verifier_guard as _VG
 
     def _audit(**kw):
         """Report a refused result as a FAIL instead of crashing the tally — a
@@ -177,7 +177,7 @@ def main():
     # `audit` is wrapped by verifier_guard: break classify and no result may come
     # out at all. A detector that still answers after its controls fail is the
     # failure mode verifier_guard exists for.
-    from huntail import verifier_guard as VG
+    from verdict import verifier_guard as VG
     saved = RA.classify
     try:
         RA.classify = lambda v, run_invalid=False: ("T0", "stuck")

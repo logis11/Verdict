@@ -903,7 +903,7 @@ def render_sink_gates(r, limit=14):
 
 if __name__ == "__main__":
     import sys
-    from huntail.pe import PE
+    from verdict.pe import PE
     p = PE(sys.argv[1])
     r = gates(p, int(sys.argv[2], 16), int(sys.argv[3], 16))
     print("verdict: %s" % r["verdict"])

@@ -19,11 +19,11 @@ import sys
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # repo root
 sys.path.insert(0, HERE)
 
-from huntail import adjudicator
-from huntail import escalator
-from huntail import interrogator
-from huntail import refuter
-from huntail import submit
+from verdict import adjudicator
+from verdict import escalator
+from verdict import interrogator
+from verdict import refuter
+from verdict import submit
 
 FAIL = []
 # The count is never hardcoded. A hardcoded total (a sum written by hand) once
@@ -52,7 +52,7 @@ def _func_src(modname, fnname):
     exactly the kind of check that reports a number about nothing.
     """
     import ast
-    src = open(os.path.join(HERE, "huntail", modname.rsplit(".", 1)[-1] + ".py"), encoding="utf-8").read()
+    src = open(os.path.join(HERE, "verdict", modname.rsplit(".", 1)[-1] + ".py"), encoding="utf-8").read()
     tree = ast.parse(src)
     for n in ast.walk(tree):
         if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)) and n.name == fnname:
@@ -119,7 +119,7 @@ ck("refuter: a broken last object is not replaced by an earlier one",
 
 # the old regex must be gone
 for mod in (interrogator, refuter, escalator):
-    src = open(os.path.join(HERE, "huntail", mod.__name__.rsplit(".", 1)[-1] + ".py"), encoding="utf-8").read()
+    src = open(os.path.join(HERE, "verdict", mod.__name__.rsplit(".", 1)[-1] + ".py"), encoding="utf-8").read()
     ck("%s: the old _JSON regex is removed" % mod.__name__, "_JSON = re.compile" not in src)
 
 
@@ -142,7 +142,7 @@ for key, mod, who in (("refuted", refuter, "refuter"),
     v = mod.parse_verdict('{"%s": true, "principal": "AC SID", "reason": "text"}' % key)
     ck("%s: text fallback -> via='text'" % who, v.get("via") == "text", v)
     # does run() build a per-session bucket? (a global one mixes concurrent runs)
-    src = open(os.path.join(HERE, "huntail", mod.__name__.rsplit(".", 1)[-1] + ".py"), encoding="utf-8").read()
+    src = open(os.path.join(HERE, "verdict", mod.__name__.rsplit(".", 1)[-1] + ".py"), encoding="utf-8").read()
     ck("%s: run() creates a submission server per session" % who, "submit.make(" in src)
     ck("%s: the submission tool is in BOTH tools and allowed_tools" % who,
        "tools=_tools, allowed_tools=_tools" in src and "submit.TOOL_FQN" in src)
@@ -183,7 +183,7 @@ for mod, key, who in ADVERSARIES + ((adjudicator, "verdict", "adjudicator"),):
 # a retry must not resend the identical prompt — it breaks the same way twice
 for mod, who in ((interrogator, "interrogator"), (refuter, "refuter"),
                  (escalator, "escalator"), (adjudicator, "adjudicator")):
-    src = open(os.path.join(HERE, "huntail", mod.__name__.rsplit(".", 1)[-1] + ".py"), encoding="utf-8").read()
+    src = open(os.path.join(HERE, "verdict", mod.__name__.rsplit(".", 1)[-1] + ".py"), encoding="utf-8").read()
     ck("%s: the retry appends an instruction" % who, "_nudge=submit.RETRY_NUDGE" in src)
     ck("%s: run() retries once on a fault" % who,
        "_retry=1" in src and 'v.get("fault") and _retry > 0' in src)

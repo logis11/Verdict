@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # EVAL-KNOWNCVE-1028: srvnet-9444 known-CVE evaluation run
-# Huntail static-only, cumulative mode (FRESH=0), eval candidates pre-seeded
+# Verdict static-only, cumulative mode (FRESH=0), eval candidates pre-seeded
 set -euo pipefail
 
 export MODEL=claude-opus-5
@@ -31,7 +31,7 @@ export OPERATOR_GOAL="surface 7건(SrvLibAuditShareModification 0x1400287e0, Srv
 export OPERATOR_GOAL_KIND=judge
 export OPERATOR_GOAL_BY=operator
 
-cd /home/kinn/projects/Huntail
+cd /home/kinn/projects/Verdict
 
 echo "=== EVAL-KNOWNCVE-1028 ==="
 echo "target: work/bin/srvnet-9444.sys"
@@ -41,4 +41,4 @@ echo "timeout: $CASE_TIMEOUT"
 echo "tag:    $RUN_TAG"
 echo ""
 
-python3 -m huntail.agent_sdk work/bin/srvnet-9444.sys 2>&1 | tee work/logs/eval-srvnet-1028.log
+python3 -m verdict.agent_sdk work/bin/srvnet-9444.sys 2>&1 | tee work/logs/eval-srvnet-1028.log

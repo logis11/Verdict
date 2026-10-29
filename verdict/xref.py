@@ -152,7 +152,7 @@ def render(hits, cov, names, want_desc=""):
 
 if __name__ == "__main__":
     import sys
-    from huntail.pe import PE
+    from verdict.pe import PE
     p = PE(sys.argv[1])
     w = sys.argv[2].split(",") if len(sys.argv) > 2 else AUTHZ
     h, c, n = sweep(p, w)

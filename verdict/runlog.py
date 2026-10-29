@@ -4,8 +4,8 @@
 # this adds is one metrics line appended to `runs.jsonl` when a run finishes, so
 # the regression bench can tabulate it.
 import json, os, re, time
-from huntail.paths import ROOT
-from huntail import config
+from verdict.paths import ROOT
+from verdict import config
 
 _JSONL = os.path.join(ROOT, "runs.jsonl")
 STATE = {"t0": None, "meta": {}, "transcript": None}
@@ -131,7 +131,7 @@ def mark_baseline(triage_state):
                            if isinstance(v, dict)
                            and str(v.get("why") or "").lstrip().upper().startswith("BLOCKED"))
     try:
-        from huntail import ledger as _L0
+        from verdict import ledger as _L0
         _RUN["leads_open0"] = len(_L0.open_leads(triage_state.get("target")))
     except Exception:
         _RUN["leads_open0"] = None
@@ -164,7 +164,7 @@ def _deltas(triage_state, m):
     #   so deltas leak into running totals (see the baseline note above).
     #   With no baseline the value is **None, not 0**.
     try:
-        from huntail import ledger as _L
+        from verdict import ledger as _L
         _A2 = triage_state.get("asks") or []
         _open_now = sum(1 for a in _A2 if (a.get("status") or "open") == "open")
         _ans_now = sum(1 for a in _A2 if a.get("status") == "answered")
@@ -252,7 +252,7 @@ def snapshot(triage_state, key=""):
         m["surface_untouched"] = max(0, len(surf) - m["surface_judged"] - m["surface_blocked"])
         m["verdicts_total"] = len(triage_state.get("verdicts") or [])
         try:
-            from huntail import ledger as _L
+            from verdict import ledger as _L
             m["surface_sites"], _sr, m["surface_dup_rows"], _st = _L.surface_sites(triage_state)
         except Exception:
             pass
@@ -315,7 +315,7 @@ def finish(result_msg, flag, triage_state):
     m["surface_untouched"] = max(0, len(surf) - m["surface_judged"] - m["surface_blocked"])
     m["verdicts_total"] = len(triage_state.get("verdicts") or [])
     try:
-        from huntail import ledger as _L
+        from verdict import ledger as _L
         m["surface_sites"], _sr, m["surface_dup_rows"], _st = _L.surface_sites(triage_state)
     except Exception:
         pass

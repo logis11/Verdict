@@ -37,9 +37,9 @@
 import capstone
 from capstone import x86 as X
 
-from huntail import cfg as CFG
-from huntail import config
-from huntail import verifier_guard as VG
+from verdict import cfg as CFG
+from verdict import config
+from verdict import verifier_guard as VG
 
 IRP_CURRENT_STACK = 0xB8
 IRP_USERBUFFER = 0x70
@@ -337,7 +337,7 @@ def _fp_control(label):
     hand-verified to produce a false positive. Its answer is pinned to zero."""
     import os
 
-    from huntail import pe as PEmod
+    from verdict import pe as PEmod
     path = config.DBLFETCH_FP_CONTROL
     if not path or not os.path.exists(path):
         raise RuntimeError("control image not available: %r" % path)
@@ -392,7 +392,7 @@ def detect(pe, limit=None):
 if __name__ == "__main__":
     import sys
 
-    from huntail import pe as PEmod
+    from verdict import pe as PEmod
     p = PEmod.PE(sys.argv[1])
     rs = detect(p)
     hot = [r for r in rs if r["validated"] and r["used"]]

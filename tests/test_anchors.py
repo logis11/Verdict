@@ -37,9 +37,9 @@ def ck(name, cond, extra=""):
 
 
 def main():
-    from huntail import evidence as EV
-    from huntail import mkpe
-    from huntail import pe as PE
+    from verdict import evidence as EV
+    from verdict import mkpe
+    from verdict import pe as PE
 
     VA = 0x140038C5C
 
@@ -87,7 +87,7 @@ def main():
 
     # The floor is asserted on the source too, so a future edit cannot lower it
     # without this test noticing.
-    src = open(os.path.join(HERE, "huntail", "evidence.py"), encoding="utf-8").read()
+    src = open(os.path.join(HERE, "verdict", "evidence.py"), encoding="utf-8").read()
     ck("C4: the separator class is `+` (one or more)", "_SEP = r'[*`_|,:\\-\\s]+'" in src,
        "with `*` (zero or more) the address splits")
     ck("C5: no em-dash in the separator class",

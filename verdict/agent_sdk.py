@@ -33,8 +33,8 @@ from claude_agent_sdk import (
 )
 
 import json
-from huntail import config, tools as T, ledger, doctrine, runlog, evidence, refuter, interrogator, escalator
-from huntail import adjudicator
+from verdict import config, tools as T, ledger, doctrine, runlog, evidence, refuter, interrogator, escalator
+from verdict import adjudicator
 
 STATE = {"calls": 0, "nudges": [], "stop_blocks": 0}
 VERDICT = "mcp__vuln__verdict"
@@ -971,7 +971,7 @@ async def _interrogate_closure(tgt, inp, act):
     #   canonical channel (`ledger.note_write` **does not exist** — the first version
     #   called it and was about to swallow the failure in a try/except).
     try:
-        from huntail import tools as _T
+        from verdict import tools as _T
         _T._t_note({"action": "write",
                     "key": "CLOSURE-INTERROG-%s-%s" % (act, str(name)[:36]),
                     "text": "## Conclusion\nInterrogation of the closing prose: %s\n\n%s\n\nThe closure verbatim:\n%s\n\n%s"

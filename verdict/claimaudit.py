@@ -29,7 +29,7 @@ single day.
 
 import re
 
-from huntail.verifier_guard import guarded
+from verdict.verifier_guard import guarded
 
 # ── 1) anchor verification ──────────────────────────────────────────────────
 
@@ -122,7 +122,7 @@ def offset_query(blocks, byte_off, class_prefix=None, var="this", writers_only=F
 def _image_range(pe_path):
     """(lowest VA, highest VA) of the mapped image, or None."""
     try:
-        from huntail.pe import PE
+        from verdict.pe import PE
         P = PE(pe_path)
     except Exception:
         return None
@@ -223,7 +223,7 @@ _SIGNED_PROBE_CONST = 0xC0DEF00D
 
 def _control_anchor(pe_path):
     """Derive (va, expected_regex) from the target PE. None if there is none."""
-    from huntail.pe import PE
+    from verdict.pe import PE
     try:
         P = PE(pe_path)
         _fns = P.merged_functions()[:400]

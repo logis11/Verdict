@@ -88,8 +88,8 @@ SINK_CLASSES = [
 
 
 def _img(code, pdata=((0x1000, 0x1040),)):
-    from huntail import mkpe
-    from huntail import pe as PEM
+    from verdict import mkpe
+    from verdict import pe as PEM
     d = tempfile.mkdtemp(prefix="test_cfg_")
     p = os.path.join(d, "v.bin")
     with open(p, "wb") as f:
@@ -105,8 +105,8 @@ def _disasm(code, base):
 
 
 def main():
-    from huntail import cfg as CFG
-    from huntail import mkpe
+    from verdict import cfg as CFG
+    from verdict import mkpe
     B = mkpe.IMAGE_BASE + mkpe.TEXT_VA
 
     # ── A. the verdict matrix ───────────────────────────────────────────────

@@ -39,8 +39,8 @@
 #   => the audit table alone is enough to revert this or narrow the permission.
 import asyncio
 
-from huntail import jsonscan
-from huntail import submit
+from verdict import jsonscan
+from verdict import submit
 
 VERDICTS = ("confirm", "reject", "exhaust")
 

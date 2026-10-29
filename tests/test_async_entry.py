@@ -48,8 +48,8 @@ def _image(callback_va, fn="IoSetCompletionRoutine", imports=None):
          lea rcx, [rip+..]            <- the callback argument
          call qword ptr [rip+IAT(fn)] <- the registration call
     """
-    from huntail import mkpe
-    from huntail import pe as PEM
+    from verdict import mkpe
+    from verdict import pe as PEM
 
     def code(slots):
         base = mkpe.IMAGE_BASE + mkpe.TEXT_VA
@@ -66,8 +66,8 @@ def _image(callback_va, fn="IoSetCompletionRoutine", imports=None):
 
 
 def main():
-    from huntail import async_entry as AE
-    from huntail import mkpe
+    from verdict import async_entry as AE
+    from verdict import mkpe
     TEXT = mkpe.IMAGE_BASE + mkpe.TEXT_VA
     IN_TEXT = TEXT + 0x100                 # inside .text  (vsize 0x200)
     IN_RDATA = mkpe.IMAGE_BASE + mkpe.RDATA_VA   # inside .rdata — NOT code
@@ -171,7 +171,7 @@ def main():
     bare = os.path.join(d, "bare.bin")
     with open(bare, "wb") as f:
         f.write(mkpe.build())
-    from huntail import pe as PEM
+    from verdict import pe as PEM
     ck("D1: an image with no imports yields nothing", AE.scan(PEM.PE(bare)) == [])
     unrelated = _image(IN_TEXT, fn="IoSetCompletionRoutine",
                        imports={"ntoskrnl.exe": ["IoSetCompletionRoutine",
@@ -216,7 +216,7 @@ def main():
     ck("F5: an unknown control label is an error, not a pass",
        _raises(AE._control_probe, "no_such_control"))
 
-    from huntail import verifier_guard as _VG
+    from verdict import verifier_guard as _VG
     try:
         ck("F6: enumerate_async emits once the controls pass",
            len(AE.enumerate_async(P)) == 1)
@@ -224,7 +224,7 @@ def main():
         ck("F6: enumerate_async emits once the controls pass", False, str(e)[:200])
 
     # ── G. control status is honest about what ran ──────────────────────────
-    from huntail import config as _C
+    from verdict import config as _C
     st = AE.control_status()
     avail = bool(getattr(_C, "ASYNC_CONTROL_IMAGE", "")
                  and os.path.exists(_C.ASYNC_CONTROL_IMAGE))
@@ -246,8 +246,8 @@ def main():
 
 def _raw(codefn, imports):
     """An image with hand-written code and the given imports."""
-    from huntail import mkpe
-    from huntail import pe as PEM
+    from verdict import mkpe
+    from verdict import pe as PEM
     d = tempfile.mkdtemp(prefix="test_async_")
     p = os.path.join(d, "v.bin")
     with open(p, "wb") as f:

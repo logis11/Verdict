@@ -19,7 +19,7 @@
 # diagnosis is returned along with the failure.
 import re
 
-from huntail import pe as PE
+from verdict import pe as PE
 
 # 0x140099e53  cmp dword [rbx+0x2d4], 0xfffffff   ; comment
 # 0x140099e53: cmp     [rbx+2D4h], 0FFFFFFFh

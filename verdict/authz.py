@@ -21,7 +21,7 @@ import collections
 import capstone
 from capstone import x86 as X
 
-from huntail import xref
+from verdict import xref
 
 AUTHZ = xref.AUTHZ
 IDENTITY = xref.IDENTITY
@@ -226,7 +226,7 @@ def gates_inter(pe, guard_va, sink_va, depth=6):
     If either breaks, the answer is "does not dominate". If it cannot be decided,
     it is not decided.
     """
-    from huntail import cfg
+    from verdict import cfg
     g, bounds = callgraph(pe)
     F = func_of(bounds, guard_va)
     G = func_of(bounds, sink_va)
@@ -295,7 +295,7 @@ def render(res):
 
 if __name__ == "__main__":
     import sys
-    from huntail.pe import PE
+    from verdict.pe import PE
     p = PE(sys.argv[1])
     tg = [int(x, 0) for x in sys.argv[2].split(",")] if len(sys.argv) > 2 else []
     ct = [int(x, 0) for x in sys.argv[3].split(",")] if len(sys.argv) > 3 else []

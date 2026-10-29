@@ -12,9 +12,9 @@
 #  3) **Scenario de-duplication** — by (function, hypothesis) pair. Source targets use ±20 lines; here it is ±0x40 VA.
 #  4) **Anchor records** — every confirmation stores its machine-verified citations alongside. A report can use them as-is.
 import atexit, hashlib, json, os, re, sys, tempfile, time, uuid
-from huntail.paths import ROOT
+from verdict.paths import ROOT
 
-from huntail import config
+from verdict import config
 
 STATE = {
     "target": "", "guid": "", "started": "",
@@ -1030,7 +1030,7 @@ def code_coverage():
     ※ It uses only the direct-call graph, so the reachable count is a **lower bound** (jump tables and guard_dispatch_icall are missed).
     """
     try:
-        from huntail import tools as _T, pe as _PE
+        from verdict import tools as _T, pe as _PE
         ix = _T._ix()
         if not ix:
             return (None, 0, 0)
@@ -1160,7 +1160,7 @@ def verified_negatives():
     Returns: (rate, verified, total_rejections). With a sample of 0, rate=None — it claims no ratio.
     """
     try:
-        from huntail import rejaudit as RA
+        from verdict import rejaudit as RA
     except Exception:
         return (None, 0, 0)
     tot = ver = 0
@@ -1508,7 +1508,7 @@ def close_candidate(rec, state, klass=None, reason="", impact=None):
 
 def _pe_for_gates():
     try:
-        from huntail import tools as _T
+        from verdict import tools as _T
         return _T.TARGET.get("_pe")
     except Exception:
         return None
@@ -2264,7 +2264,7 @@ def rules_for(key, n=2, width=300, image=None):
     if not key:
         return ""
     try:
-        from huntail import config as _cf
+        from verdict import config as _cf
         if not getattr(_cf, "GATE_LESSONS", True):
             return ""
     except Exception:
@@ -2692,7 +2692,7 @@ _CITE_HINT = {
 
 def _img():
     try:
-        from huntail import pe as PE
+        from verdict import pe as PE
         t = STATE.get("target") or ""
         return PE.PE(t) if t and os.path.exists(t) else None
     except Exception:
@@ -2721,7 +2721,7 @@ def _is_neither(tgt):
 def _cites(text):
     """The `0xADDR mnem ops` citations in an evidence text. An empty list when the evidence module is missing."""
     try:
-        from huntail import evidence as EV
+        from verdict import evidence as EV
         return EV.parse(text or "")
     except Exception:
         return []
@@ -3015,7 +3015,7 @@ def _reject_gate(tgt, args):
 
     # R1 — machine-verify the anchors (the same G1 as for a confirmation, applied to a rejection)
     if img is not None:
-        from huntail import evidence as EV
+        from verdict import evidence as EV
         res, summ = EV.check(img, ev, images=_images_for_anchor())
         rec["anchors"] = summ
         if summ["cites"] == 0 and klass not in ("by_design", "delta_zero"):
@@ -3058,7 +3058,7 @@ def _reject_gate(tgt, args):
     # R6 — `not_controlled` ("the value is a constant") requires, as an anchor, **the instruction that plants** that constant.
     # Anything not of the form `mov reg, imm` / `mov [mem], imm` is not grounds for a constant.
     if klass == "not_controlled" and img is not None:
-        from huntail import evidence as EV
+        from verdict import evidence as EV
         cites = EV.parse(ev)
         ok_const = False
         for c in cites:
@@ -3242,7 +3242,7 @@ def _reject_gate(tgt, args):
         #   pair**, and the real rebuttal (the probe helper, MmUserProbeAddress) was free text nobody
         #   looked at.
         try:
-            from huntail import cfg as _CFG
+            from verdict import cfg as _CFG
             sc = _CFG.sink_class(img, sk)
         except Exception as _e:
             sc = {"class": "unknown", "why": str(_e)}
@@ -3255,7 +3255,7 @@ def _reject_gate(tgt, args):
                            "(dereference / call / write) as the sink."
                            % (sk, sc.get("insn", "?"), sc.get("why", "")), rec)
         try:
-            from huntail import cfg as CFG
+            from verdict import cfg as CFG
             # A single guard goes to gates(), a set to gates_cut(). At n=1 the two are equivalent —
             # the old path is kept anyway: only if **the function called** is also the same on a re-run
             # can one say "equivalent, not a regression".
@@ -3263,7 +3263,7 @@ def _reject_gate(tgt, args):
                  else CFG.gates_cut(img, gset, sk))
             # If it is inter-procedural, hand off to the call graph — the "checked once at the door" shape lives here.
             if r.get("verdict") == "cross_function":
-                from huntail import authz as AZ
+                from verdict import authz as AZ
                 r2 = AZ.gates_inter(img, g, sk)
                 r2["intra"] = "cross_function"
                 r = r2
@@ -3589,7 +3589,7 @@ def untouched_regions(image_path, state=None, page=0x1000, limit=12):
     # Count the functions in each range from .pdata — "how many functions" is a unit you can choose by, "how many KB left" is not
     fns = []
     try:
-        from huntail import pe as _PE
+        from verdict import pe as _PE
         fns = [f[0] for f in _PE.PE(image_path).runtime_functions()]
     except Exception:
         pass
@@ -4110,7 +4110,7 @@ def _impact_gate(args):
 
 
 def _cfgmod():
-    from huntail import config as _c
+    from verdict import config as _c
     return _c
 
 
@@ -4121,7 +4121,7 @@ def _bump(key):
     On the night of 2026-09-04, five finished analyses vanished in the msquic round and **there was no way to tell why** —
     the return value goes only to the model and is left nowhere in stdout or runs.jsonl."""
     try:
-        from huntail import runlog as _rl
+        from verdict import runlog as _rl
         _rl.bump(key)
     except Exception:
         pass
@@ -4227,7 +4227,7 @@ def export_surface(state=None, img_path=None, out_dir=None):
     guid = None
     if img_path:
         try:
-            from huntail import pe as _pe
+            from verdict import pe as _pe
             cv = _pe.PE(img_path).codeview()
             guid = cv[0] if cv else None
         except Exception:
@@ -4268,7 +4268,7 @@ def load_surface(path, img_path=None):
         return (doc, False, "no binary to cross-check against — not reusing")
     got = None
     try:
-        from huntail import pe as _pe
+        from verdict import pe as _pe
         cv = _pe.PE(img_path).codeview()
         got = cv[0] if cv else None
     except Exception as e:
@@ -4511,7 +4511,7 @@ def verdict(args):
         #   not connected** (the same state as `measure.py`). It does not block — the value may be computed — it warns in the tail.
         _const_note = ""
         try:
-            from huntail import claimaudit as _CA
+            from verdict import claimaudit as _CA
             _t = STATE.get("target") or ""
             if _t and os.path.exists(_t):
                 _cc = _CA.constants_cited(args.get("claim", "") + " " + args.get("evidence", ""),
@@ -4716,7 +4716,7 @@ def verdict(args):
             # ★ Tool **results** do not stay in the transcript ([tool ] records only the call). There was no way
             #   to confirm afterwards whether this device actually fired, so it leaves one line. Silence is not evidence.
             try:
-                from huntail import runlog as _rl
+                from verdict import runlog as _rl
                 _rl.transcript("[anchoridx] %s — showed %d earlier rows"
                                % (str(tgt)[:60], _ah.count("\n   [")))
             except Exception:
@@ -4743,7 +4743,7 @@ def verdict(args):
         #   It does not block — under a recall-maximising objective there is no reason to block confirmations further. **It only shows.**
         if act == "confirm":
             try:
-                from huntail import cfg as _cfg
+                from verdict import cfg as _cfg
                 _p = _pe_for_gates()
                 _sv = _sink_va(rec)
                 if _p is not None and _sv is not None:
@@ -5737,7 +5737,7 @@ def _images_for_anchor():
       `verdict(action='reject')` — the agent reported it verbatim in the round log. Wiring must go **into every path together**.
     """
     try:
-        from huntail import tools as _T
+        from verdict import tools as _T
         return _T.images_all()
     except Exception:
         return {}

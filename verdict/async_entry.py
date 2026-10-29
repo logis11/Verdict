@@ -25,9 +25,9 @@
 import capstone
 from capstone import x86 as X
 
-from huntail import config
-from huntail import verifier_guard as VG
-from huntail import xref as XR
+from verdict import config
+from verdict import verifier_guard as VG
+from verdict import xref as XR
 
 # registration API -> the context its callback runs in
 REGISTRARS = {
@@ -159,8 +159,8 @@ def _synthetic(callback_va):
     import struct
     import tempfile
 
-    from huntail import mkpe
-    from huntail import pe as PEmod
+    from verdict import mkpe
+    from verdict import pe as PEmod
 
     def code(slots):
         base = mkpe.IMAGE_BASE + mkpe.TEXT_VA
@@ -179,8 +179,8 @@ def _synthetic(callback_va):
 def _control_probe(label):
     import os
 
-    from huntail import mkpe
-    from huntail import pe as PEmod
+    from verdict import mkpe
+    from verdict import pe as PEmod
     if label == "synthetic_callback_recovered":
         # Positive: a callback planted in .text must come back, at that address.
         rs = scan(_synthetic(_SYNTH_CB))
@@ -258,7 +258,7 @@ if __name__ == "__main__":
     import collections
     import sys
 
-    from huntail import pe as PEmod
+    from verdict import pe as PEmod
     p = PEmod.PE(sys.argv[1])
     rs = enumerate_async(p)
     got = [r for r in rs if r["callback"]]

@@ -82,8 +82,8 @@ MERGE_POINT = (HEAD_SP + DEVCTL
 
 
 def _img(code, pdata=((0x1000, 0x1040),)):
-    from huntail import mkpe
-    from huntail import pe as PEM
+    from verdict import mkpe
+    from verdict import pe as PEM
     d = tempfile.mkdtemp(prefix="test_dblfetch_")
     p = os.path.join(d, "v.bin")
     with open(p, "wb") as f:
@@ -92,7 +92,7 @@ def _img(code, pdata=((0x1000, 0x1040),)):
 
 
 def main():
-    from huntail import dblfetch as DF
+    from verdict import dblfetch as DF
 
     # ── A. the positives ────────────────────────────────────────────────────
     rs = DF.scan(_img(POSITIVE))
@@ -143,7 +143,7 @@ def main():
     ck("E1: the synthetic positive fires", DF._probe("user_slot_refetch") == 1)
     ck("E2: a kernel slot is ignored", DF._probe("kernel_slot_ignored") == 0)
     ck("E3: no lineage is ignored", DF._probe("no_lineage_ignored") == 0)
-    from huntail import verifier_guard as _VG
+    from verdict import verifier_guard as _VG
     try:
         ck("E4: detect() produces a result once they pass",
            len(DF.detect(_img(POSITIVE))) == 1)
@@ -167,7 +167,7 @@ def main():
        "union" in st, st)
     # The dangerous direction is a status that claims a control ran when it did
     # not, so availability, the control set and the wording all have to agree.
-    from huntail import config as _C
+    from verdict import config as _C
     avail = bool(getattr(_C, "DBLFETCH_FP_CONTROL", "")
                  and os.path.exists(_C.DBLFETCH_FP_CONTROL))
     ck("F4: availability follows the configured path",

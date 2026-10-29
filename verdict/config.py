@@ -11,7 +11,7 @@
 # measurement side (guest VM, kernel debugger, probe directories) is per-lab and
 # arrives with the modules that use it.
 import os
-from huntail.paths import ROOT
+from verdict.paths import ROOT
 import shutil
 
 

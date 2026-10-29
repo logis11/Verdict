@@ -11,10 +11,10 @@
 #      around a 3,884-function corpus with a single grep over names.
 import hashlib
 import json, os, re, struct, subprocess, sys, tempfile, time
-from huntail.paths import ROOT
+from verdict.paths import ROOT
 
-from huntail import config, ledger, nav, evidence, xref, authz
-from huntail import pe as PEmod
+from verdict import config, ledger, nav, evidence, xref, authz
+from verdict import pe as PEmod
 
 TARGET = {"binary": None, "alt": None, "corpus": None,
           "_pe": None, "_alt": None, "_ix": None,
@@ -1079,7 +1079,7 @@ def _t_surface(a):
         # Exhaustive asynchronous entry points — the pool of race counterparties. Do
         # not read an absence here as "there is none"; this is a candidate generator.
         try:
-            from huntail import async_entry as AE
+            from verdict import async_entry as AE
             p_ = _pe()
             if p_ is None:
                 return "no binary."
@@ -1131,7 +1131,7 @@ def _t_sink_gates(a):
     p = _pe()
     if p is None:
         return "no binary."
-    from huntail import cfg as CFG
+    from verdict import cfg as CFG
     # A confirmed bug: this used to be `a.get("target") or a.get("sink")`, so a
     #   present `target` **discarded the sink entirely.** The agent's standard call is
     #     sink_gates(target='<handler name>', sink='0x...31b')
@@ -1308,7 +1308,7 @@ def _t_ioctl(a):
             # ungraded.
             try:
                 import measure as M
-                from huntail import ledger as _L
+                from verdict import ledger as _L
                 _ha = bytes.fromhex((_runs[0].get("outhex") or "").replace(" ", ""))
                 _hb = bytes.fromhex((_runs[1].get("outhex") or "").replace(" ", ""))
                 _df = M.DualFill(_ha, _hb, status=_runs[0].get("err") or 0,
@@ -1342,7 +1342,7 @@ def _t_ioctl(a):
             #   the transcript showed four).
             #   It is a `trace`, not a grade — adjudicating from a single fill stays
             #   forbidden.
-            from huntail import ledger as _Li
+            from verdict import ledger as _Li
             _blob2 = "%s %s %s" % (a.get("target") or "", a.get("device") or "",
                                    a.get("code") or "")
             _Li.measure_record(a.get("target") or a.get("device") or "?", "trace",
@@ -1393,7 +1393,7 @@ def _t_kd(a):
     #     `kind='trace'`: the content of this record is only "the harness really ran
     #     this".
     try:
-        from huntail import ledger as _Lk
+        from verdict import ledger as _Lk
         _blob = "%s %s" % (a.get("cmds", ""), a.get("target") or "")
         _Lk.measure_record(a.get("target") or _Lk.STATE.get("target") or "?",
                            "trace", "kd: %s" % str(a.get("cmds", ""))[:200],
@@ -1481,7 +1481,7 @@ def _t_kdscan(a):
         return "kdscan failed: %s: %s" % (type(e).__name__, e)
 
     try:
-        from huntail import ledger as _Lk
+        from verdict import ledger as _Lk
         _Lk.measure_record(a.get("target") or _Lk.STATE.get("target") or "?",
                            "trace", "kdscan[%s]: %s" % (r.get("verdict"), bp[:160]),
                            kind="trace", vas=_Lk.measure_vas("%s %s" % (bp, dump)),
@@ -1535,7 +1535,7 @@ def _kdscan_stim(ps1_body, timeout):
     ★ The harness owns the encoding, line endings and transport. On 09-13 this was left to the
       analyst's head, and it died silently three times — a UTF-8 BOM, LF, and `-Command` string escaping.
     """
-    from huntail import config as C
+    from verdict import config as C
     import vmprobe as V
     body = ps1_body.replace("\r\n", "\n").replace("\n", "\r\n")
     body.encode("ascii")                       # anything non-ASCII raises loudly right here
@@ -1568,7 +1568,7 @@ def _t_record(a):
     ★ None of the three **can hold a confirmation or a rejection.** Promotion still goes through `verdict()` and takes
       the gates attached there (basis, controls, the debt cap) as they are. Not a back door but **material preservation.**
     """
-    from huntail import ledger as L
+    from verdict import ledger as L
     k = (a.get("kind") or "").strip().lower()
 
     def _list(v):
@@ -1927,7 +1927,7 @@ def _t_double_fetch(a):
     if not p:
         return "no binary."
     try:
-        from huntail import dblfetch as DF
+        from verdict import dblfetch as DF
         lim = a.get("limit")
         rs = DF.detect(p, int(lim) if lim else None)
     except Exception as e:
@@ -1960,7 +1960,7 @@ def _t_guards(a):
     p = _pe()
     if p is None or not TARGET.get("binary"):
         return "no binary."
-    from huntail import guards as G
+    from verdict import guards as G
     try:
         _pe2, hits, nprobe = G.scan(TARGET["binary"])
     except Exception as e:

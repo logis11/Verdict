@@ -57,8 +57,8 @@ CORPUS = (
 
 
 def main():
-    from huntail import claimaudit as CA
-    from huntail import mkpe
+    from verdict import claimaudit as CA
+    from verdict import mkpe
     B = mkpe.IMAGE_BASE + mkpe.TEXT_VA
 
     d = tempfile.mkdtemp(prefix="test_claimaudit_")
@@ -160,7 +160,7 @@ def main():
        CA._probe("anchor-hit", _pe=bare) is False)
 
     # ── F. audit() end to end ───────────────────────────────────────────────
-    from huntail import verifier_guard as _VG
+    from verdict import verifier_guard as _VG
     try:
         rows = CA.audit([{"id": "ghost", "va": None, "claim": "magic 0xDEADBEEF"},
                          {"id": "real", "va": None, "claim": "marker 0xCCCCCCCC"},

@@ -20,8 +20,8 @@
 # rejecter's reasoning.** It sees the claim and the evidence the rejection
 # submitted, and nothing else.
 import asyncio
-from huntail import jsonscan
-from huntail import submit
+from verdict import jsonscan
+from verdict import submit
 
 # The ways a rejection collapses — not generic theory, things this project has
 # actually run into.

@@ -38,13 +38,13 @@
 import glob
 import json
 import os
-from huntail.paths import ROOT
+from verdict.paths import ROOT
 import re
 import subprocess
 import sys
 import time
 
-from huntail import deadrun
+from verdict import deadrun
 
 CONFIRMED = "confirmed"            # the ledger's confirmed status (see ledger.STATUS)
 
@@ -197,7 +197,7 @@ def _child_env(ns, tag, run_idx):
 
 def _one_run(binary, corpus, ns, tag, run_idx, log_path, timeout):
     """Spawn one trajectory, capture its log, return (status, log_text)."""
-    cmd = [sys.executable, "-m", "huntail.agent_sdk", binary]
+    cmd = [sys.executable, "-m", "verdict.agent_sdk", binary]
     if corpus:
         cmd.append(corpus)
     env = _child_env(ns, tag, run_idx)

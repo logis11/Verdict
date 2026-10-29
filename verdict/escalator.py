@@ -36,8 +36,8 @@
 # Context asymmetry as before: the escalator cannot see the verdict's reasoning.
 # It sees the claim, the evidence and the impact.
 import asyncio
-from huntail import jsonscan
-from huntail import submit
+from verdict import jsonscan
+from verdict import submit
 
 # The axes that have **actually flipped** a delta that looked like zero. Not
 # generic theory — things this project went through.

@@ -16,7 +16,7 @@ import sys
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # repo root
 sys.path.insert(0, HERE)
-from huntail import deadrun
+from verdict import deadrun
 
 FAIL = []
 
@@ -97,7 +97,7 @@ ck("does not catch a healthy run that merely TALKS about quota/rate", not trans(
 # was fixed twice while the shells kept the old version. A copy diverges silently,
 # so no other module in the tree is allowed to re-define the DEAD pattern.
 _copies = []
-_scan = [(d, fn) for d in (HERE, os.path.join(HERE, "huntail")) for fn in sorted(os.listdir(d))]
+_scan = [(d, fn) for d in (HERE, os.path.join(HERE, "verdict")) for fn in sorted(os.listdir(d))]
 for d, fn in _scan:
     if fn == "deadrun.py" or fn.startswith("test_") or not fn.endswith((".py", ".sh")):
         continue
